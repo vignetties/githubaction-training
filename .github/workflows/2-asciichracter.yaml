@@ -4,8 +4,8 @@ on:
     push: 
 
 jobs: 
-    testing: 
-        name:  Testing files 
+    myascii: 
+        name:  configuring cowsay 
         runs-on: ubuntu-latest
         steps: 
             - name: installing cowsay command
