@@ -1,0 +1,38 @@
+name: Multiple Jobs in A Single Workflow
+
+on: 
+     workflow_dispatch: 
+
+jobs: 
+    build_job: 
+        runs-on: ubuntu-latest
+        steps: 
+            - name: Installing Cowsay Program
+              run: sudo apt-get install cowsay -y 
+            - run: cowsay -f dragon "Run ,  dragon is there" >> dragon.txt
+            - name: uploading Artifcats
+              uses: actions/upload-artifact@v4
+              with: 
+                name: dragon-test-file
+                path: dragon.txt
+
+    test_job: 
+        needs: build_job
+        runs-on: ubuntu-latest
+        steps: 
+            - name: downlaoding the artifacts
+              uses: actions/download-artifact@v4
+              with: 
+                name: dragon-test-file
+            - name: greping the word dragon 
+              run: grep -i dragon dragon.txt
+
+    deploy_job: 
+        needs: [test_job]
+        runs-on: ubuntu-latest
+        steps: 
+            - uses: actions/download-artifact@v4
+              with: 
+                name: dragon-test-file
+            - run: cat dragon.txt
+            - run: echo "Successfully Run The Jobs"
