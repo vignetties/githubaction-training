@@ -1,25 +1,30 @@
 name: Exploring Vairables and Secrets
-
 on: 
-    push:
+    workflow_dispatch:
+env: 
+    CONTAINER_REGISTRY: docker.io
+    IMAGE_NAME: github-actions-nginx
 
 jobs: 
     docker: 
         runs-on: ubuntu-latest
         steps: 
             - name: step level env
-              env: 
-                CONTAINER_REGISTRY: docker.io
-                DOCKER_USERNAME: mdhack
-                IMAGE_NAME: github-actions-nginx
-              run: echo  docker build -t ${{ env.CONTAINER_REGISTRY }}/$DOCKER_USERNAME/$IMAGE_NAME
+              run: echo  docker build -t ${{ env.CONTAINER_REGISTRY }}/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME
 
-            - run: echo docker login  --username=$DOCKER_USERNAME   --password=qwerty
+            - run: echo docker login  --username=${{ vars.DOCKER_USERNAME }}  --password=${{ secrets.DOCKER_PASSWORD }}
 
-            - run: echo docker push  docker.io/mdhack0316/imagename
+            #- run: echo docker push  docker.io/mdhack0316/imagename
     
     deploy: 
+        needs: docker
         runs-on: ubuntu-latest
+        concurrency: 
+            cancel-in-progress: false
+            group: mayank 
         steps: 
             - name: running containers
-              run: echo docker run -itd -p 8080:80 docker.io/mdhack/imagename
+              timeout-minutes: 1
+              run: | 
+                        echo docker run -itd -p 8080:80 $CONTAINER_REGISTRY/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME
+                        sleep 600
