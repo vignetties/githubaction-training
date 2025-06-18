@@ -1,0 +1,16 @@
+name: Basic Github Actions YAML for cowsay
+
+on: 
+    workflow_dispatch: 
+
+jobs: 
+    myascii: 
+        name:  configuring cowsay 
+        runs-on: ubuntu-latest
+        steps: 
+            - name: checking out
+              uses: actions/checkout@v4
+            - name: Using Shell Script
+              run: | 
+                    chmod +x cowsayshellscript.sh
+                    ./cowsayshellscript.sh
