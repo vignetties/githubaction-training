@@ -4,7 +4,7 @@ on:
     push: 
 
 jobs: 
-    myascii: 
+    testing: 
         name:  configuring cowsay 
         runs-on: ubuntu-latest
         steps: 
