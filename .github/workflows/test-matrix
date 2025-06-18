@@ -1,4 +1,4 @@
-name: Test Matrix
+name: Test Matrix-A
 
 on: [push]
 
