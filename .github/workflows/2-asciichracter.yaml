@@ -5,7 +5,7 @@ on:
 
 jobs: 
     testing: 
-        name:  configuring cowsay 
+        name:  Testing files 
         runs-on: ubuntu-latest
         steps: 
             - name: installing cowsay command
